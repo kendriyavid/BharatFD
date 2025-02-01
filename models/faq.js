@@ -24,11 +24,9 @@ const FaqSchema = new mongoose.Schema({
 
 FaqSchema.pre('save', async function(next) {
   if (this.isNew) {
-    // Get the current highest faqId
     const highestFaq = await this.constructor.findOne({}, { faqId: 1 })
       .sort({ faqId: -1 });
     
-    // Generate next faqId
     const nextId = highestFaq ? 
       'FAQ' + (Number(highestFaq.faqId.replace('FAQ', '')) + 1).toString().padStart(4, '0') :
       'FAQ0001';

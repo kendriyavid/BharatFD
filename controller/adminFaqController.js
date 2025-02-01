@@ -4,7 +4,6 @@ const createFaq = async (req, res) => {
     try {
         const { question, response } = req.body;
         
-        // Input validation
         if (!question || !response) {
             return res.status(400).json({ 
                 message: "Question and response are required" 
@@ -33,10 +32,8 @@ const createFaq = async (req, res) => {
 
 const updateFaq = async (req, res) => {
     try {
-        // Use faqId instead of _id for updates
         const { id } = req.params;
         
-        // Remove {id: id} format and fix 'True' to 'true'
         const updatedFaq = await Faq.findOneAndUpdate(
             { faqId: id },
             req.body,
@@ -65,7 +62,6 @@ const deleteFaq = async (req, res) => {
     try {
         const { id } = req.params;
         
-        // Remove {id: id} format
         const deletedFaq = await Faq.findOneAndDelete({ faqId: id });
 
         if (!deletedFaq) {
@@ -83,30 +79,8 @@ const deleteFaq = async (req, res) => {
     }
 };
 
-// // Add a function to get FAQ by ID
-// const getFaqById = async (req, res) => {
-//     try {
-//         const { id } = req.params;
-//         const faq = await Faq.findOne({ faqId: id });
-
-//         if (!faq) {
-//             return res.status(404).json({ message: "FAQ not found" });
-//         }
-
-//         res.json(faq);
-
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).json({ 
-//             message: "Error fetching FAQ",
-//             error: error.message 
-//         });
-//     }
-// };
-
 module.exports = {
     createFaq,
     updateFaq,
     deleteFaq,
-    // getFaqById
 };
