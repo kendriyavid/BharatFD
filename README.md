@@ -80,6 +80,10 @@ The application translates HTML-based content dynamically using `HTMLtranslate.j
 - If translation fails, the original text is retained.
 - Unexpected errors are logged to the console.
 
+  ## Example
+<img src="https://github.com/user-attachments/assets/890d6e6f-516b-4e5c-954e-3ca53001124b" width="400" height="450">
+
+
 ## Caching Strategy for FAQ Management
 To optimize performance and reduce database queries, Redis is used as a caching layer.
 
