@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 const redisClient = require('./utils/redisClient.js'); // Assuming redisClient.js is in the same directory
 const Faq = require('./models/faq.js');
 const {updateFaqIdsInCache} = require("./utils/redisFaqState.js")
+const {login} = require("./controller/adminAuthController.js")
 
 dotenv.config();
 const app = express();
@@ -38,6 +39,8 @@ app.use(express.urlencoded({ extended: true }));
 app.get("/", (req, res) => {
     res.send("hi there");
 });
+
+app.get("/adminlogin",login);
 
 app.use('/api/faqs', require('./router/client.js'));
 app.use("/api/admin", require("./router/admin.js"));

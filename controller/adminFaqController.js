@@ -71,14 +71,10 @@ const deleteFaq = async (req, res) => {
         }
 
         // Delete all cached responses for this FAQ
-        // const keysToDelete = await redisClient.keys(`faq:${id}:response:*`);
-        // if (keysToDelete.length > 0) {
-        //     await redisClient.del(...keysToDelete);
-        // }
         await deleteFaqkeysInCache(id)
         res.json({ message: "FAQ deleted successfully" });
 
-        updateFaqIdsInCache(); // Remove the ID from the FAQ IDs list
+        updateFaqIdsInCache();
     } catch (error) {
         console.error(error);
         res.status(500).json({ 
