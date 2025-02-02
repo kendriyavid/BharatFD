@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const redisClient = require('./utils/redisClient.js'); // Assuming redisClient.js is in the same directory
 const Faq = require('./models/faq.js');
+const {updateFaqIdsInCache} = require("./utils/redisFaqState.js")
 
 dotenv.config();
 const app = express();
@@ -22,17 +23,7 @@ const dbConnection = async () => {
     }
 };
 
-// Redis client update function
-const updateFaqIdsInCache = async () => {
-    try {
-        // Fetch all FAQ IDs from the database
-        const faqIds = await Faq.find().select('faqId'); // Query database for all FAQ IDs
-        await redisClient.set('faqIds:en', JSON.stringify(faqIds.map(faq => faq.faqId)));
-        console.log('FAQ IDs stored in Redis cache');
-    } catch (error) {
-        console.error('Error updating FAQ IDs in cache:', error);
-    }
-};
+
 
 // Initialize the database connection and cache the FAQ IDs
 dbConnection();

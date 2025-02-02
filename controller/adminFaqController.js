@@ -1,4 +1,5 @@
 const Faq = require("../models/faq.js");
+const {updateFaqIdsInCache,deleteFaqkeysInCache} = require("../utils/redisFaqState.js")
 
 const createFaq = async (req, res) => {
     try {
@@ -20,6 +21,7 @@ const createFaq = async (req, res) => {
             message: "FAQ created successfully",
             faq: savedFaq
         });
+        updateFaqIdsInCache();
 
     } catch (error) {
         console.error(error);
@@ -68,8 +70,15 @@ const deleteFaq = async (req, res) => {
             return res.status(404).json({ message: "FAQ not found" });
         }
 
+        // Delete all cached responses for this FAQ
+        // const keysToDelete = await redisClient.keys(`faq:${id}:response:*`);
+        // if (keysToDelete.length > 0) {
+        //     await redisClient.del(...keysToDelete);
+        // }
+        await deleteFaqkeysInCache(id)
         res.json({ message: "FAQ deleted successfully" });
 
+        updateFaqIdsInCache(); // Remove the ID from the FAQ IDs list
     } catch (error) {
         console.error(error);
         res.status(500).json({ 
