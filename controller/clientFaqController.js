@@ -16,11 +16,16 @@ const fetchAllFaq = async (req, res) => {
 
             const cacheResponse = await redisClient.get(`faq:${faqId}:response:${lang}`);
             if (cacheResponse) {
-                translatedResponse = cacheResponse;
-
-                faq = await Faq.findOne({ faqId });
+                console.log("cacheresponse: ",cacheResponse)
+                translatedResponse = JSON.parse(cacheResponse);
+                faqs.push({
+                    id: translatedResponse.id,
+                    question: translatedResponse.question,  
+                    response: translatedResponse.response  
+                });
             } else {
                 faq = await Faq.findOne({ faqId });
+                console.log("db response",faq)
 
                 if (!faq) {
                     continue; 
@@ -30,16 +35,18 @@ const fetchAllFaq = async (req, res) => {
                     ? faq.response 
                     : (await translateHTML(faq.response, lang)).translated;
 
-                await redisClient.set(`faq:${faqId}:response:${lang}`, translatedResponse);
-            }
-
-            faqs.push({
-                id: faqId,
-                question: faq ? faq.question : null,  
-                response: translatedResponse  
-            });
+                await redisClient.set(`faq:${faqId}:response:${lang}`, JSON.stringify({
+                    id: faqId,
+                    question: faq.question,
+                    response:translatedResponse
+                }));
+                faqs.push({
+                    id: faqId,
+                    question: faq ? faq.question : null,  
+                    response: translatedResponse  
+                });
+            }  
         }
-
         res.json(faqs);
     } catch (error) {
         console.error('Error fetching FAQs:', error);
@@ -53,14 +60,21 @@ const fetchAllFaq = async (req, res) => {
 const fetchSpecific = async (req, res) => {
     const lang = req.query.lang || "default";
     const id = req.params.id;
-    const cacheKey = `faq:${id}:${lang}`; 
+    const cacheKey = `faq:${id}:response:${lang}`; 
 
     try {
         const cachedFaq = await redisClient.get(cacheKey);
         
         if (cachedFaq) {
             console.log("Returning specific FAQ from cache");
-            return res.json(JSON.parse(cachedFaq));
+            console.log(cachedFaq)
+            const parsed = JSON.parse(cachedFaq)
+            const jsonCachef  ={
+                id: parsed.id,
+                question: parsed.question,
+                response: parsed.response,
+            }
+            return res.json(jsonCachef);
         }
 
         const faq = await Faq.findOne({ faqId: id });
