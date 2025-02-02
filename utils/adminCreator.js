@@ -5,15 +5,31 @@ const User = require('../models/user'); // Assuming User model is properly defin
 
 dotenv.config();
 
+// const dbConnection = async () => {
+//     try {
+//         await mongoose.connect(process.env.DATABASE_URL, {
+//             useNewUrlParser: true,
+//             useUnifiedTopology: true
+//         });
+//         console.log('Connected to the database');
+//     } catch (error) {
+//         console.error('Database connection failed:', error);
+//     }
+// };
+
+
+
 const dbConnection = async () => {
     try {
-        await mongoose.connect(process.env.DATABASE_URL, {
+        await mongoose.connect(process.env.DATABASE_URI, {
             useNewUrlParser: true,
             useUnifiedTopology: true
         });
-        console.log('Connected to the database');
+
+        console.log("Connected to MongoDB Atlas");
+
     } catch (error) {
-        console.error('Database connection failed:', error);
+        console.error("Database connection failed:", error);
     }
 };
 
