@@ -1,38 +1,4 @@
 # Node.js dependencies
 node_modules/
 
-# Environment files
 .env
-
-# Logs
-logs/
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Build output
-dist/
-build/
-
-# Docker
-docker-compose.override.yml
-Dockerfile
-
-# OS-specific files
-.DS_Store
-Thumbs.db
-
-# IDE or editor settings
-.vscode/
-.idea/
-
-# npm package lock file (optional, if you want to ignore package-lock.json or yarn.lock)
-package-lock.json
-yarn.lock
-
-# Mac specific
-*.swp
-
-# Other files
-coverage/
