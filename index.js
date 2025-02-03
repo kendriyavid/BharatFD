@@ -14,18 +14,6 @@ const {login} = require("./controller/adminAuthController.js")
 const app = express();
 const port = process.env.PORT || 3000;
 
-// // db connection
-// const dbConnection = async () => {
-//     try {
-//         await mongoose.connect(`${process.env.DATABASE_URL}`);
-//         console.log("connected to the database");
-
-//         // After DB connection, connect to Redis and update FAQ IDs cache
-//         await updateFaqIdsInCache();
-//     } catch (error) {
-//         console.log("database connection failed: ", error);
-//     }
-// };
 
 const dbConnection = async () => {
     try {
@@ -73,7 +61,7 @@ const dbConnection = async () => {
 dbConnection();
 
 const corsOptions = {
-    origin: "http://localhost:5173",
+    origin: ["https://bharatfrontend.onrender.com, http://localhost:5173"],
 };
 app.use(cors(corsOptions));
 app.use(express.json());
