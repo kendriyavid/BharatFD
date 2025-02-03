@@ -1,8 +1,15 @@
 const Faq = require('../models/faq.js');
 const translateHTML = require("../utils/htmlTranslator.js");
 const redisClient = require("../utils/redisClient.js")
+const validator = require("validator")
+
 const fetchAllFaq = async (req, res) => {
     const lang = req.query.lang || 'default';
+
+    if (lang !== 'default' && !validator.isAlphanumeric(lang)) {
+        return res.status(400).json({ message: 'Invalid language parameter' });
+    }
+
 
     try {
         const faqIdsJson = await redisClient.get('faqIds:en');
@@ -61,6 +68,15 @@ const fetchSpecific = async (req, res) => {
     const lang = req.query.lang || "default";
     const id = req.params.id;
     const cacheKey = `faq:${id}:response:${lang}`; 
+
+    if (lang !== 'default' && !validator.isAlphanumeric(lang)) {
+        return res.status(400).json({ message: 'Invalid language parameter' });
+    }
+
+    if (!id || !validator.isAlphanumeric(id)) {
+        return res.status(400).json({ message: 'Invalid FAQ ID' });
+    }
+
 
     try {
         const cachedFaq = await redisClient.get(cacheKey);
