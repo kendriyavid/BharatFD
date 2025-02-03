@@ -5,11 +5,6 @@ const redisClient = new Redis({
     port: process.env.REDIS_PORT || 6379,        // Default Redis port
 });
 
-// const redisClient = new Redis({
-//     host: "localhost",  // Use the container name in Docker
-//     port: 6379,        // Default Redis port
-// });
-
 
 redisClient.ping((err, result) => {
     if (err) console.error("Error connecting to Redis:", err);

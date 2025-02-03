@@ -67,3 +67,5 @@ app.use("/api/admin", require("./router/admin.js"));
 app.listen(port, () => {
     console.log("the application is running");
 });
+
+module.exports = app;
