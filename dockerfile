@@ -2,6 +2,8 @@
 FROM node:23.5.0
 
 # Set the working directory inside the container
+RUN apk add --no-cache ca-certificates
+
 WORKDIR /app
 
 # Copy package.json and package-lock.json first to install dependencies

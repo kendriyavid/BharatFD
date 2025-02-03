@@ -1,11 +1,10 @@
 const request = require('supertest');
-const app = require('../../index.js'); // Adjust the path to your app entry point
+const app = require('../../index.js'); 
 const User = require('../../models/user');
 const bcrypt = require('bcryptjs');
 
 describe('POST /adminlogin', () => {
   beforeAll(async () => {
-    // Create a test admin user
     await User.create({
       username: 'admin',
       email: 'admin@example.com',

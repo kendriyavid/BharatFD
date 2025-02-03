@@ -29,12 +29,36 @@ const port = process.env.PORT || 3000;
 
 const dbConnection = async () => {
     try {
+        // await mongoose.connect(process.env.DATABASE_URI, {
+        //     useNewUrlParser: true,
+        //     useUnifiedTopology: true
+        // });
+
+        // await mongoose.connect(process.env.DATABASE_URI, {
+        //     useNewUrlParser: true,
+        //     useUnifiedTopology: true,
+        //     ssl: true,
+        //     sslValidate: true,
+        //     tls: true,
+        //     tlsAllowInvalidCertificates: false,
+        //     retryWrites: true,
+        //     maxPoolSize: 10,
+        //     serverSelectionTimeoutMS: 5000,
+        //     socketTimeoutMS: 45000,
+        //   });
+          
+        // console.log("Connected to MongoDB Atlas");
+
         await mongoose.connect(process.env.DATABASE_URI, {
             useNewUrlParser: true,
-            useUnifiedTopology: true
-        });
-
-        console.log("Connected to MongoDB Atlas");
+            useUnifiedTopology: true,
+            ssl: true,
+            tls: true,
+            retryWrites: true,
+            maxPoolSize: 10
+          });
+          console.log('Database connected successfully');
+      
 
         // After DB connection, connect to Redis and update FAQ IDs cache
         await updateFaqIdsInCache();
@@ -67,5 +91,3 @@ app.use("/api/admin", require("./router/admin.js"));
 app.listen(port, () => {
     console.log("the application is running");
 });
-
-module.exports = app;

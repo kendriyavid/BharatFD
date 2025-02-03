@@ -4,7 +4,6 @@ const Faq = require('../../models/faq');
 
 describe('FAQ Fetching', () => {
   beforeAll(async () => {
-    // Create a test FAQ
     await Faq.create({
       faqId: 'FAQ0001',
       question: 'What is Express.js?',

@@ -4,7 +4,6 @@ const mongoose = require("mongoose");
 
 dotenv.config();
 
-// Mock ioredis with redis-mock
 jest.mock("ioredis", () => {
   const Redis = require("redis-mock");
   return Redis;

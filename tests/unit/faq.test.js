@@ -6,7 +6,6 @@ describe('FAQ CRUD Operations', () => {
   let faqId;
 
   beforeAll(async () => {
-    // Clear the FAQ collection before tests
     await Faq.deleteMany({});
   });
 
