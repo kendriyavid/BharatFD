@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const User = require("../models/user.js");
+const validator = require("validator")
 
 const generateAccessToken = (user) => {
     return jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "1h" }); // Token expires in 1 hour
@@ -8,6 +9,21 @@ const generateAccessToken = (user) => {
 
 const login = async (req, res) => {
     const { email, password } = req.body;
+
+    if (!email) {
+        return res.status(400).json({ message: "Email is required" });
+    }
+    if (!validator.isEmail(email)) {
+        return res.status(400).json({ message: "Invalid email format" });
+    }
+
+    if (!password) {
+        return res.status(400).json({ message: "Password is required" });
+    }
+    if (password.length < 4) {
+        return res.status(400).json({ message: "Password must be at least 4 characters long" });
+    }
+
 
     try {
         const user = await User.findOne({ email });

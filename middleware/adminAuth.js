@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const User = require("../models/user.js"); // Assuming you have a User model
+const User = require("../models/user.js"); 
 const secretKey = process.env.JWT_SECRET; 
 
 const verifyAdmin = async (req, res, next) => {
@@ -18,8 +18,8 @@ const verifyAdmin = async (req, res, next) => {
             return res.status(403).json({ message: "Access denied. Admins only." });
         }
 
-        req.user = user; // Attach user info to request
-        next(); // Proceed to the next function
+        req.user = user; 
+        next(); 
     } catch (error) {
         res.status(401).json({ message: "Invalid token", error: error.message });
     }

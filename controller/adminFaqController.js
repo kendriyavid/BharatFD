@@ -5,11 +5,24 @@ const createFaq = async (req, res) => {
     try {
         const { question, response } = req.body;
         
-        if (!question || !response) {
-            return res.status(400).json({ 
-                message: "Question and response are required" 
+        // if (!question || !response) {
+        //     return res.status(400).json({ 
+        //         message: "Question and response are required" 
+        //     });
+        // }
+
+        if (!question || typeof question !== "string" || question.trim().length === 0) {
+            return res.status(400).json({
+                message: "Question is required and must be a non-empty string"
             });
         }
+
+        if (!response || typeof response !== "string" || response.trim().length === 0) {
+            return res.status(400).json({
+                message: "Response is required and must be a non-empty string"
+            });
+        }
+
 
         const faq = new Faq({
             question,
@@ -35,6 +48,19 @@ const createFaq = async (req, res) => {
 const updateFaq = async (req, res) => {
     try {
         const { id } = req.params;
+        const { question, response } = req.body;
+        
+        if (question && (typeof question !== "string" || question.trim().length === 0)) {
+            return res.status(400).json({
+                message: "Question must be a non-empty string"
+            });
+        }
+
+        if (response && (typeof response !== "string" || response.trim().length === 0)) {
+            return res.status(400).json({
+                message: "Response must be a non-empty string"
+            });
+        }
         
         const updatedFaq = await Faq.findOneAndUpdate(
             { faqId: id },
