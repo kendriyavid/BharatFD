@@ -5,7 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
+    "test:debug": "jest --detectOpenHandles",
     "start": "node index.js",
     "dev": "nodemon index.js"
   },
@@ -23,6 +24,7 @@
     "mongodb": "^6.13.0",
     "mongoose": "^8.9.6",
     "nodemon": "^3.1.9",
+    "sanitize-html": "^2.14.0",
     "translate-google-api": "^1.0.4",
     "validator": "^13.12.0"
   },
@@ -32,6 +34,4 @@
     "redis-mock": "^0.56.3",
     "supertest": "^7.0.0"
   }
-
-  
 }

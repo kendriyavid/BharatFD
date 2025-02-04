@@ -1,28 +1,31 @@
+import Faq from "../../models/faq.js";
+import { updateFaqIdsInCache } from "../../utils/redisFaqState.js";
+import Redis from 'ioredis'; // Jest mocked Redis
 
-const redisClient = require('../../utils/redisClient');
-const Faq = require('../../models/faq');
-const { updateFaqIdsInCache } = require('../../utils/redisFaqState');
+describe("Redis Caching", () => {
+  let redis;
 
-describe('Redis Caching', () => {
   beforeAll(async () => {
-    // Create a test FAQ
     await Faq.create({
-      faqId: 'FAQ0001',
-      question: 'What is Redis?',
-      response: 'Redis is an in-memory data store.',
+      faqId: "FAQ0001",
+      question: "What is Redis?",
+      response: "Redis is an in-memory data store.",
     });
+
+    redis = new Redis();
   });
 
   afterAll(async () => {
     await Faq.deleteMany({});
-    await redisClient.flushall();
+    await redis.flushall(); 
   });
 
-  it('should update FAQ IDs in Redis cache', async () => {
+  it("should update FAQ IDs in Redis cache", async () => {
     await updateFaqIdsInCache();
 
-    const cachedFaqIds = await redisClient.get('faqIds:en');
+    const cachedFaqIds = await redis.get("faqIds:en");
+
     expect(cachedFaqIds).toBeDefined();
-    expect(JSON.parse(cachedFaqIds)).toContain('FAQ0001');
+    expect(JSON.parse(cachedFaqIds)).toContain("FAQ0001");
   });
 });

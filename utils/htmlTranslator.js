@@ -45,7 +45,7 @@ async function translateHTML(htmlString, targetLanguage) {
         return translationResult.text;
       } catch (error) {
         console.error("Translation error for text:", text, error);
-        return text; // Fallback to original text
+        return text; 
       }
     })
   );
@@ -77,3 +77,4 @@ async function translateHTML(htmlString, targetLanguage) {
 }
 
 export default translateHTML;
+
