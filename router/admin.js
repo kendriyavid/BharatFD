@@ -1,10 +1,11 @@
-const express = require('express')
+import express from 'express';
+import { createFaq, updateFaq, deleteFaq } from '../controller/adminFaqController.js';
+import verifyAdmin from '../middleware/adminAuth.js';
+
 const router = express.Router();
-const {createFaq,updateFaq,deleteFaq} = require('../controller/adminFaqController')
-const verifyAdmin = require("../middleware/adminAuth.js")
 
-router.post('/faq',verifyAdmin,createFaq)
-router.patch('/faq/:id',verifyAdmin,updateFaq)
-router.delete('/faq/:id',verifyAdmin,deleteFaq)
+router.post('/faq', verifyAdmin, createFaq);
+router.patch('/faq/:id', verifyAdmin, updateFaq);
+router.delete('/faq/:id', verifyAdmin, deleteFaq);
 
-module.exports = router;
+export default router;

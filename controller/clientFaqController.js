@@ -1,7 +1,7 @@
-const Faq = require('../models/faq.js');
-const translateHTML = require("../utils/htmlTranslator.js");
-const redisClient = require("../utils/redisClient.js")
-const validator = require("validator")
+import Faq from '../models/faq.js';
+import translateHTML from "../utils/htmlTranslator.js";
+import redisClient from "../utils/redisClient.js";
+import validator from "validator";
 
 const fetchAllFaq = async (req, res) => {
     const lang = req.query.lang || 'default';
@@ -9,7 +9,6 @@ const fetchAllFaq = async (req, res) => {
     if (lang !== 'default' && !validator.isAlphanumeric(lang)) {
         return res.status(400).json({ message: 'Invalid language parameter' });
     }
-
 
     try {
         const faqIdsJson = await redisClient.get('faqIds:en');
@@ -23,16 +22,16 @@ const fetchAllFaq = async (req, res) => {
 
             const cacheResponse = await redisClient.get(`faq:${faqId}:response:${lang}`);
             if (cacheResponse) {
-                console.log("cacheresponse: ",cacheResponse)
+                console.log("Cache response: ", cacheResponse);
                 translatedResponse = JSON.parse(cacheResponse);
                 faqs.push({
                     id: translatedResponse.id,
-                    question: translatedResponse.question,  
-                    response: translatedResponse.response  
+                    question: translatedResponse.question,
+                    response: translatedResponse.response
                 });
             } else {
                 faq = await Faq.findOne({ faqId });
-                console.log("db response",faq)
+                console.log("DB response", faq);
 
                 if (!faq) {
                     continue; 
@@ -45,12 +44,12 @@ const fetchAllFaq = async (req, res) => {
                 await redisClient.set(`faq:${faqId}:response:${lang}`, JSON.stringify({
                     id: faqId,
                     question: faq.question,
-                    response:translatedResponse
+                    response: translatedResponse
                 }));
                 faqs.push({
                     id: faqId,
-                    question: faq ? faq.question : null,  
-                    response: translatedResponse  
+                    question: faq.question,
+                    response: translatedResponse
                 });
             }  
         }
@@ -60,9 +59,6 @@ const fetchAllFaq = async (req, res) => {
         res.status(500).json({ message: 'Error fetching FAQs', error: error.message });
     }
 };
-
-
-
 
 const fetchSpecific = async (req, res) => {
     const lang = req.query.lang || "default";
@@ -77,20 +73,17 @@ const fetchSpecific = async (req, res) => {
         return res.status(400).json({ message: 'Invalid FAQ ID' });
     }
 
-
     try {
         const cachedFaq = await redisClient.get(cacheKey);
-        
+
         if (cachedFaq) {
             console.log("Returning specific FAQ from cache");
-            console.log(cachedFaq)
-            const parsed = JSON.parse(cachedFaq)
-            const jsonCachef  ={
+            const parsed = JSON.parse(cachedFaq);
+            return res.json({
                 id: parsed.id,
                 question: parsed.question,
-                response: parsed.response,
-            }
-            return res.json(jsonCachef);
+                response: parsed.response
+            });
         }
 
         const faq = await Faq.findOne({ faqId: id });
@@ -135,4 +128,4 @@ const fetchSpecific = async (req, res) => {
     }
 };
 
-module.exports = { fetchAllFaq, fetchSpecific };
+export { fetchAllFaq, fetchSpecific };

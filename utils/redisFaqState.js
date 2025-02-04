@@ -1,7 +1,7 @@
-const redisClient = require('./redisClient.js')
-const Faq = require('../models/faq.js');
+import redisClient from './redisClient.js';
+import Faq from '../models/faq.js';
 
-const updateFaqIdsInCache = async () => {
+export const updateFaqIdsInCache = async () => {
     try {
         const faqIds = await Faq.find().select('faqId'); // Query database for all FAQ IDs
         await redisClient.set('faqIds:en', JSON.stringify(faqIds.map(faq => faq.faqId)));
@@ -11,15 +11,13 @@ const updateFaqIdsInCache = async () => {
     }
 };
 
-const deleteFaqkeysInCache = async(id)=>{
-    try{
+export const deleteFaqkeysInCache = async (id) => {
+    try {
         const keysToDelete = await redisClient.keys(`faq:${id}:response:*`);
         if (keysToDelete.length > 0) {
             await redisClient.del(...keysToDelete);
         }
-    }catch(error){
-        console.log(error)
+    } catch (error) {
+        console.log(error);
     }
-}
-
-module.exports={updateFaqIdsInCache, deleteFaqkeysInCache}
+};

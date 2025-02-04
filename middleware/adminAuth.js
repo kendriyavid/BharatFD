@@ -1,11 +1,11 @@
-const jwt = require("jsonwebtoken");
-const User = require("../models/user.js"); // Assuming you have a User model
-const secretKey = process.env.JWT_SECRET; 
+import jwt from 'jsonwebtoken';
+import User from '../models/user.js'; // Assuming you have a User model
+const secretKey = process.env.JWT_SECRET;
 
 const verifyAdmin = async (req, res, next) => {
     try {
-        console.log(req.headers)
-        const token = req.headers.authorization?.split(" ")[1]; 
+        console.log(req.headers);
+        const token = req.headers.authorization?.split(" ")[1];
 
         if (!token) {
             return res.status(401).json({ message: "Access denied. No token provided." });
@@ -25,4 +25,4 @@ const verifyAdmin = async (req, res, next) => {
     }
 };
 
-module.exports = verifyAdmin;
+export default verifyAdmin;

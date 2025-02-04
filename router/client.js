@@ -1,8 +1,9 @@
-const express = require('express')
+import express from 'express';
+import { fetchAllFaq, fetchSpecific } from '../controller/clientFaqController.js';
+
 const router = express.Router();
-const {fetchAllFaq, fetchSpecific} = require("../controller/clientFaqController")
 
-router.get("/fetchall",fetchAllFaq)
-router.get("/:id", fetchSpecific)
+router.get('/fetchall', fetchAllFaq);
+router.get('/:id', fetchSpecific);
 
-module.exports = router;
+export default router;

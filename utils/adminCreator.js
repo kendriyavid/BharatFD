@@ -1,33 +1,17 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
-const dotenv = require('dotenv');
-const User = require('../models/user'); // Assuming User model is properly defined
+import mongoose from 'mongoose';
+import bcrypt from 'bcryptjs';
+import dotenv from 'dotenv';
+import User from '../models/user.js'; // Assuming User model is properly defined
 
 dotenv.config();
-
-// const dbConnection = async () => {
-//     try {
-//         await mongoose.connect(process.env.DATABASE_URL, {
-//             useNewUrlParser: true,
-//             useUnifiedTopology: true
-//         });
-//         console.log('Connected to the database');
-//     } catch (error) {
-//         console.error('Database connection failed:', error);
-//     }
-// };
-
-
 
 const dbConnection = async () => {
     try {
         await mongoose.connect(process.env.DATABASE_URI, {
             useNewUrlParser: true,
-            useUnifiedTopology: true
+            useUnifiedTopology: true,
         });
-
         console.log("Connected to MongoDB Atlas");
-
     } catch (error) {
         console.error("Database connection failed:", error);
     }

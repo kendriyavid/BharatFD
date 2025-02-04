@@ -1,7 +1,7 @@
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
-const User = require("../models/user.js");
-const validator = require("validator")
+import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
+import User from "../models/user.js";
+import validator from "validator";
 
 const generateAccessToken = (user) => {
     return jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "1h" }); // Token expires in 1 hour
@@ -23,7 +23,6 @@ const login = async (req, res) => {
     if (password.length < 4) {
         return res.status(400).json({ message: "Password must be at least 4 characters long" });
     }
-
 
     try {
         const user = await User.findOne({ email });
@@ -47,6 +46,4 @@ const login = async (req, res) => {
     }
 };
 
-
-
-module.exports = { login };
+export { login };

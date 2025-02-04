@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "backend for the dev test",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
@@ -31,4 +32,6 @@
     "redis-mock": "^0.56.3",
     "supertest": "^7.0.0"
   }
+
+  
 }

@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const FaqSchema = new mongoose.Schema({
   faqId: {
@@ -8,19 +8,18 @@ const FaqSchema = new mongoose.Schema({
   question: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
   },
   response: {
-    type: String, // Stores WYSIWYG-generated HTML content
-    required: true
+    type: String, 
+    required: true,
   },
   translations: {
-    type: Map, // Stores translated versions of the response
+    type: Map, 
     of: String,
-    default: {} // Example: { "hi": "<p>हिंदी अनुवाद</p>", "bn": "<p>বাংলা অনুবাদ</p>" }
-  }
+    default: {}, 
+  },
 }, { timestamps: true });
-
 
 FaqSchema.pre('save', async function(next) {
   if (this.isNew) {
@@ -36,7 +35,6 @@ FaqSchema.pre('save', async function(next) {
   next();
 });
 
-
-
 const Faq = mongoose.model("Faq", FaqSchema);
-module.exports = Faq;
+
+export default Faq;

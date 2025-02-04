@@ -1,5 +1,5 @@
-const { JSDOM } = require('jsdom');
-const { translate } = require('google-translate-api-x');
+import { JSDOM } from 'jsdom';
+import { translate } from 'google-translate-api-x';
 
 async function translateHTML(htmlString, targetLanguage) {
   const dom = new JSDOM(htmlString);
@@ -69,12 +69,11 @@ async function translateHTML(htmlString, targetLanguage) {
     console.error("Error extracting final HTML:", error);
   }
 
-  console.log( textArray,translatedTextArray,modifiedHTML,)
+  console.log(textArray, translatedTextArray, modifiedHTML);
 
   return {
     translated: finalHTML,
   };
 }
 
-
-module.exports =translateHTML
+export default translateHTML;

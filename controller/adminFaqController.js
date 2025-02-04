@@ -1,16 +1,10 @@
-const Faq = require("../models/faq.js");
-const {updateFaqIdsInCache,deleteFaqkeysInCache} = require("../utils/redisFaqState.js")
+import Faq from "../models/faq.js";
+import { updateFaqIdsInCache, deleteFaqkeysInCache } from "../utils/redisFaqState.js";
 
 const createFaq = async (req, res) => {
     try {
         const { question, response } = req.body;
         
-        // if (!question || !response) {
-        //     return res.status(400).json({ 
-        //         message: "Question and response are required" 
-        //     });
-        // }
-
         if (!question || typeof question !== "string" || question.trim().length === 0) {
             return res.status(400).json({
                 message: "Question is required and must be a non-empty string"
@@ -22,7 +16,6 @@ const createFaq = async (req, res) => {
                 message: "Response is required and must be a non-empty string"
             });
         }
-
 
         const faq = new Faq({
             question,
@@ -97,7 +90,7 @@ const deleteFaq = async (req, res) => {
         }
 
         // Delete all cached responses for this FAQ
-        await deleteFaqkeysInCache(id)
+        await deleteFaqkeysInCache(id);
         res.json({ message: "FAQ deleted successfully" });
 
         updateFaqIdsInCache();
@@ -110,8 +103,4 @@ const deleteFaq = async (req, res) => {
     }
 };
 
-module.exports = {
-    createFaq,
-    updateFaq,
-    deleteFaq,
-};
+export { createFaq, updateFaq, deleteFaq };

@@ -1,54 +1,25 @@
-const dotenv = require('dotenv');
+import dotenv from 'dotenv';
 dotenv.config();
-const express = require('express');
-const cors = require('cors');
-const mongoose = require('mongoose');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+console.log("loaded")
+console.log(process.env.REDIS_HOST, process.env.DATABASE_URI)
+import express from 'express';
+import cors from 'cors';
+import mongoose from 'mongoose';
+import { MongoClient, ServerApiVersion } from 'mongodb';
 
-const redisClient = require('./utils/redisClient.js'); // Assuming redisClient.js is in the same directory
-const Faq = require('./models/faq.js');
-const {updateFaqIdsInCache} = require("./utils/redisFaqState.js")
-const {login} = require("./controller/adminAuthController.js")
-// const uri  = `mongodb+srv://harshdeep7thc:${process.env.DATABASE_PASSWORD}@cluster0.fe2w5lj.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
+import redisClient from './utils/redisClient.js'; // Assuming redisClient.js is in the same directory
+import Faq from './models/faq.js';
+
+import { updateFaqIdsInCache } from './utils/redisFaqState.js';
+import { login } from './controller/adminAuthController.js';
+
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-// // db connection
-// const dbConnection = async () => {
-//     try {
-//         await mongoose.connect(`${process.env.DATABASE_URL}`);
-//         console.log("connected to the database");
-
-//         // After DB connection, connect to Redis and update FAQ IDs cache
-//         await updateFaqIdsInCache();
-//     } catch (error) {
-//         console.log("database connection failed: ", error);
-//     }
-// };
-
+// db connection
 const dbConnection = async () => {
     try {
-        // await mongoose.connect(process.env.DATABASE_URI, {
-        //     useNewUrlParser: true,
-        //     useUnifiedTopology: true
-        // });
-
-        // await mongoose.connect(process.env.DATABASE_URI, {
-        //     useNewUrlParser: true,
-        //     useUnifiedTopology: true,
-        //     ssl: true,
-        //     sslValidate: true,
-        //     tls: true,
-        //     tlsAllowInvalidCertificates: false,
-        //     retryWrites: true,
-        //     maxPoolSize: 10,
-        //     serverSelectionTimeoutMS: 5000,
-        //     socketTimeoutMS: 45000,
-        //   });
-          
-        // console.log("Connected to MongoDB Atlas");
-
         await mongoose.connect(process.env.DATABASE_URI, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
@@ -56,38 +27,47 @@ const dbConnection = async () => {
             tls: true,
             retryWrites: true,
             maxPoolSize: 10
-          });
-          console.log('Database connected successfully');
-      
+        });
+        console.log('Database connected successfully');
 
         // After DB connection, connect to Redis and update FAQ IDs cache
         await updateFaqIdsInCache();
     } catch (error) {
-        console.error("Database connection failed:", error);
+        console.error('Database connection failed:', error);
     }
 };
-
-
 
 // Initialize the database connection and cache the FAQ IDs
 dbConnection();
 
 const corsOptions = {
-    origin: "http://localhost:5173",
+    origin: 'http://localhost:5173',
 };
+
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get("/", (req, res) => {
-    res.send("hi there");
+app.get('/', (req, res) => {
+    res.send('hi there');
 });
 
-app.post("/adminlogin",login);
+app.post('/adminlogin', login);
 
-app.use('/api/faqs', require('./router/client.js'));
-app.use("/api/admin", require("./router/admin.js"));
+// Use async function to handle dynamic import for routes
+const loadRoutes = async () => {
+    const clientRouter = (await import('./router/client.js')).default;
+    const adminRouter = (await import('./router/admin.js')).default;
+
+    app.use('/api/faqs', clientRouter);
+    app.use('/api/admin', adminRouter);
+};
+
+// Load routes dynamically
+loadRoutes();
 
 app.listen(port, () => {
-    console.log("the application is running");
+    console.log('The application is running');
 });
+
+export default app;
