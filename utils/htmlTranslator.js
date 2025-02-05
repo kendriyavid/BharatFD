@@ -11,7 +11,7 @@ async function translateHTML(htmlString, targetLanguage) {
   function traverseAndReplace(node) {
     if (node.nodeType === document.TEXT_NODE && node.textContent.trim() !== "") {
       textArray.push(node.textContent.trim());
-      return `\${${counter++}}`;
+      return ` \${${counter++}} `;
     } 
     else if (node.nodeType === document.ELEMENT_NODE) {
       const tagName = node.tagName.toLowerCase();
