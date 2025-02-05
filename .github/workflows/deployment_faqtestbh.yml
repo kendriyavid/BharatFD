@@ -7,6 +7,8 @@ on:
   push:
     branches:
       - deployment
+    paths-ignore:
+      - 'README.md'
   workflow_dispatch:
 
 jobs:
