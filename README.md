@@ -3,6 +3,10 @@
 ## Overview
 This repository contains the backend service for **BharatFD**, handling user authentication, FAQ management, caching, and translations. The backend is built with **Node.js**, **Express.js**, and **MongoDB**, with **Redis** for caching and **Docker** for easy deployment.
 
+Deployed Link: https://bharatfrontend.onrender.com/
+
+Frontend Repo Link: https://github.com/kendriyavid/bharatfrontend
+
 ## Features
 - **JWT Authentication** for secure access
 - **MongoDB Atlas** as the cloud database
@@ -10,6 +14,8 @@ This repository contains the backend service for **BharatFD**, handling user aut
 - **Docker Support** for containerized deployment
 - **Google Translate API** for dynamic WYSIWYG content translation
 - **CORS Configured** to allow frontend communication
+- **Jest Testing** Ensures reliable and maintainable code by testing application functionality.
+
 
 ## Prerequisites
 Ensure you have the following installed:
@@ -19,6 +25,10 @@ Ensure you have the following installed:
 - [MongoDB Atlas](https://www.mongodb.com/) (or local MongoDB instance)
 
 ## Quick Start
+
+> **⚠️ Note:** `npm install` may take longer than usual because `mongodb-memory-server` (a large package) is installed for testing.  
+> To speed up the process, consider removing the dev dependencies from `package.json`.
+
 Clone the repository and navigate into the project directory:
 ```sh
  git clone <repository-url>
@@ -43,6 +53,7 @@ Run the application using Docker Compose:
 Access the backend at `http://localhost:3000`
 
 ### Without Docker
+> **⚠️ Note:** you will need a redis instance either in cloud or docker
 Manually install dependencies and start the server:
 ```sh
  npm install
@@ -64,7 +75,6 @@ node ./utils/adminCreator.js
 ```
 
 ## Architecture
-![Architecture Diagram](https://github.com/user-attachments/assets/0e66957c-1860-44f6-bb7a-9f3613bf6053)
 
 ## WYSIWYG Translation Strategy
 The application translates HTML-based content dynamically using `HTMLtranslate.js`.
