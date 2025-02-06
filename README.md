@@ -48,6 +48,7 @@ REDIS_PORT=6379
 ### With Docker
 Run the application using Docker Compose:
 ```sh
+ npm install
  docker compose up -d
 ```
 Access the backend at `http://localhost:3000`
