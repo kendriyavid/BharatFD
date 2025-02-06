@@ -1,9 +1,5 @@
 # Use a specific Node.js version (v23.5.0 in your case) as the base image
 FROM node:23.5.0
-
-# Set the working directory inside the container
-RUN apk add --no-cache ca-certificates
-
 WORKDIR /app
 
 # Copy package.json and package-lock.json first to install dependencies
